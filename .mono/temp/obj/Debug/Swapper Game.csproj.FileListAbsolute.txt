@@ -1,0 +1,9 @@
+C:\Users\Fyuke\Documents\Swapper Game\.mono\temp\bin\Debug\Swapper Game.dll
+C:\Users\Fyuke\Documents\Swapper Game\.mono\temp\bin\Debug\Swapper Game.pdb
+C:\Users\Fyuke\Documents\Swapper Game\.mono\temp\obj\Debug\Swapper Game.csproj.AssemblyReference.cache
+C:\Users\Fyuke\Documents\Swapper Game\.mono\temp\obj\Debug\Swapper Game.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Fyuke\Documents\Swapper Game\.mono\temp\obj\Debug\Swapper Game.AssemblyInfoInputs.cache
+C:\Users\Fyuke\Documents\Swapper Game\.mono\temp\obj\Debug\Swapper Game.AssemblyInfo.cs
+C:\Users\Fyuke\Documents\Swapper Game\.mono\temp\obj\Debug\Swapper Game.csproj.CoreCompileInputs.cache
+C:\Users\Fyuke\Documents\Swapper Game\.mono\temp\obj\Debug\Swapper Game.dll
+C:\Users\Fyuke\Documents\Swapper Game\.mono\temp\obj\Debug\Swapper Game.pdb

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "58uJT5eJSk9yAQb5i2kX/rTpilIQWDV//Pg2J/OM2KfQAF3XqEtaqwdYynQtkXSSUxwzB56fvlBcUOM2aPhGlw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Fyuke\\Documents\\Swapper Game\\Swapper Game.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Fyuke\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.2\\microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+    "C:\\Users\\Fyuke\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.2\\microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
