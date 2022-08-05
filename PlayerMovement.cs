@@ -67,6 +67,7 @@ public class PlayerMovement : KinematicBody
 
     public override void _PhysicsProcess(float delta)
     {
+
         swapGun(delta);
         if(toSwim)
         {
@@ -123,15 +124,28 @@ public class PlayerMovement : KinematicBody
         {
             if(target != null)
             {
-                object box = target.Get("translation");
-                GD.Print(target.GetPropertyList());
-                target.Set("translation", Transform.origin);
-                Translation = stringToVector3(box.ToString());
-                target = null;
+                SwapPositionWithPlayer();
+                SwapVelocityWithPlayer();
+                GD.Print(target);
+                // target = null;
             }
             else
                 GD.PrintT("No Teleport Target");
         }
+    }
+
+    void SwapPositionWithPlayer()
+    {
+        object tempTarget = target.Get("translation");
+        target.Set("translation", Transform.origin);
+        Translation = stringToVector3(tempTarget.ToString());
+    }
+
+    void SwapVelocityWithPlayer()
+    {
+        object tempTarget = target.Get("linear_velocity");
+        target.Set("linear_velocity", velocity);
+        velocity = stringToVector3(tempTarget.ToString());
     }
     
     private Vector3 stringToVector3(string coord)
@@ -198,12 +212,12 @@ public class PlayerMovement : KinematicBody
         }
         else
         {
-            fallingSpeed -=  3 * gravity * delta;
+            fallingSpeed -=  10 * gravity * delta;
         }
 
         if(Input.IsActionPressed("jump") && IsOnFloor())
         {
-            fallingSpeed = jumpPower;
+            fallingSpeed = gravity * jumpPower;
         }
 
         if(Input.IsActionPressed("jump") && surfacing)
