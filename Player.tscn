@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://PlayerMovement.cs" type="Script" id=1]
+[ext_resource path="res://crosshair.godoxel.png" type="Texture" id=2]
 
 [sub_resource type="CapsuleMesh" id=2]
 
@@ -30,6 +31,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0 )
 [node name="Camera" type="Camera" parent="CameraArm"]
 
 [node name="Flashlight" type="SpotLight" parent="CameraArm"]
+visible = false
 spot_range = 42.0
 spot_angle = 32.6598
 
@@ -38,6 +40,14 @@ transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -
 enabled = true
 cast_to = Vector3( 0, 0, 1 )
 debug_shape_thickness = 5
+
+[node name="Crosshair" type="TextureRect" parent="CameraArm"]
+margin_left = 512.0
+margin_top = 300.0
+margin_right = 576.0
+margin_bottom = 364.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 2 )
 
 [node name="BouncyPoint" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0 )

@@ -28,12 +28,14 @@ public class PlayerMovement : KinematicBody
     RayCast rayCast;
     
     Godot.Object target = null;
+    Transform player;
 
     public bool toSwim = false, surfacing = false;
     
     public override void _Ready()
     {
         mouseSensitvity /= 1000;
+        // flashlight.Visible = false;
         Input.SetMouseMode(Input.MouseMode.Captured);
         cameraArm = GetNode<Spatial>("CameraArm");
         flashlight = GetNode<SpotLight>("CameraArm/Flashlight");
@@ -53,6 +55,13 @@ public class PlayerMovement : KinematicBody
         {
             cameraArm.Rotation = Vector3.Right * Mathf.Clamp(cameraArm.Rotation.x-mouseMotion.Relative.y * mouseSensitvity, -Mathf.Pi/2, Mathf.Pi/2) ;
             RotateY(-mouseMotion.Relative.x * mouseSensitvity);
+        }
+        if(@event is InputEventKey inputKey)
+        {
+            if(inputKey.PhysicalScancode == 16777217)
+            {
+                Input.SetMouseMode(Input.MouseMode.Visible);
+            }
         }
     }
 
@@ -108,13 +117,27 @@ public class PlayerMovement : KinematicBody
             target = rayCast.GetCollider();
             
             rayCast.Enabled = false;
-            // GD.Print(target);
+            
         }
-
         if(Input.IsActionJustPressed("teleport"))
         {
-            GD.Print(target.GetPropertyList());
+            if(target != null)
+            {
+                object box = target.Get("translation");
+                GD.Print(target.GetPropertyList());
+                target.Set("translation", Transform.origin);
+                Translation = stringToVector3(box.ToString());
+                target = null;
+            }
+            else
+                GD.PrintT("No Teleport Target");
         }
+    }
+    
+    private Vector3 stringToVector3(string coord)
+    {
+        string[] stringNumbers = coord.Substring(1, coord.Length()-2).Split(", ");   
+        return new Vector3(float.Parse(stringNumbers[0]), float.Parse(stringNumbers[1]), float.Parse(stringNumbers[2]));
     }
 
     private void GroundMovement(float delta)

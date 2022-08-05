@@ -1,7 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://External Assets/PNG/Orange/texture_01.png" type="Texture" id=2]
+[ext_resource path="res://External Assets/PNG/Light/texture_03.png" type="Texture" id=2]
 
 [sub_resource type="BoxShape" id=2]
 
@@ -16,6 +16,12 @@ uv1_triplanar = true
 
 [sub_resource type="BoxShape" id=5]
 
+[sub_resource type="ProceduralSky" id=7]
+
+[sub_resource type="Environment" id=6]
+background_mode = 2
+background_sky = SubResource( 7 )
+
 [node name="World" type="Spatial"]
 
 [node name="RoomManager" type="RoomManager" parent="."]
@@ -27,17 +33,17 @@ roomlist = NodePath("RoomList")
 
 [node name="Player" parent="RoomManager/RoomList/Tutorial" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97596, 7.37377, 0.125527 )
-mouseSensitvity = 5.0
+mouseSensitvity = 3.0
+jumpPower = 15.0
 
 [node name="Cube" type="RigidBody" parent="RoomManager/RoomList/Tutorial"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.21442, 4.43757 )
-gravity_scale = 20.0
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 5, 0 )
+can_sleep = false
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="CollisionShape" type="CollisionShape" parent="RoomManager/RoomList/Tutorial/Cube"]
-transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0 )
 shape = SubResource( 2 )
 
 [node name="MeshInstance" type="MeshInstance" parent="RoomManager/RoomList/Tutorial/Cube/CollisionShape"]
@@ -51,6 +57,13 @@ mesh = SubResource( 3 )
 material/0 = SubResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="RoomManager/RoomList/Tutorial/Floor"]
+collision_layer = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="RoomManager/RoomList/Tutorial/Floor/StaticBody"]
 shape = SubResource( 5 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 6 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="WorldEnvironment"]
+transform = Transform( 1, 0, 0, 0, -0.76233, 0.647189, 0, -0.647189, -0.76233, 0, 100, -119.458 )
