@@ -32,18 +32,22 @@ transform = Transform( 2, 0, 0, 0, 0.2, 0, 0, 0, 2, 0, -0.0354439, 0 )
 operation = 2
 height = 3.262
 
-[node name="Button" type="KinematicBody" parent="."]
+[node name="Button" type="RigidBody" parent="."]
+mode = 3
 
-[node name="Area" type="Area" parent="Button"]
-transform = Transform( 1.8, 0, 0, 0, 0.33, 0, 0, 0, 1.8, 0, 0.732622, 0 )
+[node name="Tween" type="Tween" parent="Button"]
+playback_process_mode = 0
+
+[node name="ButtonArea" type="Area" parent="Button"]
+transform = Transform( 1.98, 0, 0, 0, 0.099, 0, 0, 0, 1.98, 0, 0.612319, 0 )
 collision_layer = 0
 collision_mask = 2
 
-[node name="Button-col2" type="CollisionShape" parent="Button/Area"]
+[node name="Button-col2" type="CollisionShape" parent="Button/ButtonArea"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0 )
 shape = SubResource( 4 )
 
-[node name="MeshInstance" type="MeshInstance" parent="Button/Area"]
+[node name="MeshInstance" type="MeshInstance" parent="Button/ButtonArea"]
 mesh = SubResource( 6 )
 material/0 = SubResource( 7 )
 
@@ -57,8 +61,5 @@ mesh = SubResource( 3 )
 skeleton = NodePath("")
 material/0 = null
 
-[node name="Tween" type="Tween" parent="Button"]
-playback_process_mode = 0
-
-[connection signal="body_entered" from="Button/Area" to="." method="_on_Area_body_entered"]
-[connection signal="body_exited" from="Button/Area" to="." method="_on_Area_body_exited"]
+[connection signal="body_entered" from="Button/ButtonArea" to="." method="_on_Area_body_entered"]
+[connection signal="body_exited" from="Button/ButtonArea" to="." method="_on_Area_body_exited"]

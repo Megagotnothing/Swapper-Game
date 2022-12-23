@@ -7,8 +7,9 @@
 [sub_resource type="SpatialMaterial" id=3]
 albedo_color = Color( 0.172549, 0.792157, 1, 1 )
 
-[node name="Cube" type="RigidBody"]
-collision_layer = 3
+[node name="HeavyCube" type="RigidBody"]
+collision_layer = 2
+can_sleep = false
 __meta__ = {
 "_edit_group_": true
 }

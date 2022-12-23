@@ -1,13 +1,20 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://WeightedButton.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Cube.tscn" type="PackedScene" id=3]
+[ext_resource path="res://HeavyCube.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Door.cs" type="Script" id=3]
+[ext_resource path="res://protoblack.tres" type="Material" id=4]
+
+[sub_resource type="PhysicsMaterial" id=8]
+friction = 0.0
+
+[sub_resource type="BoxShape" id=9]
+
+[sub_resource type="CubeMesh" id=10]
 
 [sub_resource type="ProceduralSky" id=7]
 sky_top_color = Color( 0.211765, 0.313726, 0.552941, 1 )
 sky_horizon_color = Color( 0.545098, 0.686275, 0.811765, 1 )
-sky_curve = 0.13
 ground_bottom_color = Color( 0.545098, 0.686275, 0.811765, 1 )
 ground_horizon_color = Color( 0.545098, 0.686275, 0.811765, 1 )
 sun_latitude = 60.0
@@ -19,58 +26,109 @@ sun_energy = 30.0
 background_mode = 2
 background_sky = SubResource( 7 )
 ambient_light_color = Color( 0.5, 0.5, 0.5, 1 )
-ambient_light_energy = 3.0
-ambient_light_sky_contribution = 0.3
+ambient_light_energy = 0.58
+ambient_light_sky_contribution = 0.0
 tonemap_mode = 2
 
 [node name="World" type="Spatial"]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+transform = Transform( -0.98689, 0, 0.104736, 0, 0.992432, 0, -0.104736, 0, -0.98689, 1.07367, 2.85781, -12.8402 )
+physics_material_override = SubResource( 8 )
+can_sleep = false
+groundAccel = 100.0
 
 [node name="RoomManager" type="RoomManager" parent="."]
 roomlist = NodePath("RoomList")
 
 [node name="RoomList" type="Spatial" parent="RoomManager"]
 
-[node name="Tutorial" type="Room" parent="RoomManager/RoomList"]
+[node name="Level 2" type="Room" parent="RoomManager/RoomList"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -64.2 )
 
-[node name="Player" parent="RoomManager/RoomList/Tutorial" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97596, 1.5, 46.6134 )
-mouseSensitvity = 3.0
-jumpPower = 3.0
+[node name="HeavyCube" parent="RoomManager/RoomList/Level 2" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 18.6026 )
 
-[node name="Cube" parent="RoomManager/RoomList/Tutorial" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.20203, 42.4878, 23.5272 )
-
-[node name="WeightedButton" parent="RoomManager/RoomList/Tutorial" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.2972, 0.163872, 23.6303 )
-
-[node name="CSGCombiner" type="CSGCombiner" parent="RoomManager/RoomList/Tutorial"]
+[node name="CSGCombiner" type="CSGCombiner" parent="RoomManager/RoomList/Level 2"]
 use_collision = true
+collision_mask = 0
 
-[node name="CSGMesh" type="CSGBox" parent="RoomManager/RoomList/Tutorial/CSGCombiner"]
-transform = Transform( 0.3, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0 )
+[node name="CSGMesh" type="CSGBox" parent="RoomManager/RoomList/Level 2/CSGCombiner"]
+transform = Transform( 0.3, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0.300003 )
 width = 128.0
-height = 24.0
-depth = 130.0
+height = 10.0
+depth = 64.7429
+material = ExtResource( 4 )
 
-[node name="CSGMesh2" type="CSGBox" parent="RoomManager/RoomList/Tutorial/CSGCombiner/CSGMesh"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 39.4803 )
+[node name="CSGMesh3" type="CSGBox" parent="RoomManager/RoomList/Level 2/CSGCombiner/CSGMesh"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -8.43433 )
 operation = 2
 width = 118.0
-height = 24.0
-depth = 46.4247
+height = 10.0
+depth = 43.4
+material = ExtResource( 4 )
 
-[node name="CSGMesh3" type="CSGBox" parent="RoomManager/RoomList/Tutorial/CSGCombiner/CSGMesh"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -7 )
+[node name="CSGMesh2" type="CSGBox" parent="RoomManager/RoomList/Level 2/CSGCombiner/CSGMesh"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 22.5339 )
 operation = 2
 width = 118.0
-height = 24.0
-depth = 42.0
+height = 10.0
+depth = 20.0
+material = ExtResource( 4 )
+
+[node name="Level 1" type="Room" parent="RoomManager/RoomList"]
+
+[node name="HeavyCube" parent="RoomManager/RoomList/Level 1" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9, 0 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="RoomManager/RoomList/Level 1"]
+use_collision = true
+collision_mask = 0
+
+[node name="Button" type="Area" parent="RoomManager/RoomList/Level 1/CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.95754, 2.79197, -24.7815 )
+
+[node name="CollisionShape" type="CollisionShape" parent="RoomManager/RoomList/Level 1/CSGCombiner/Button"]
+shape = SubResource( 9 )
+
+[node name="MeshInstance" type="MeshInstance" parent="RoomManager/RoomList/Level 1/CSGCombiner/Button"]
+mesh = SubResource( 10 )
+material/0 = null
+
+[node name="CSGMesh" type="CSGBox" parent="RoomManager/RoomList/Level 1/CSGCombiner"]
+transform = Transform( 0.3, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 0 )
+width = 128.0
+height = 10.0
+depth = 64.7429
+material = ExtResource( 4 )
+
+[node name="CSGMesh2" type="CSGBox" parent="RoomManager/RoomList/Level 1/CSGCombiner/CSGMesh"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0.333853 )
+operation = 2
+width = 118.0
+height = 12.0
+depth = 62.6005
+material = ExtResource( 4 )
+
+[node name="Door" type="CSGBox" parent="RoomManager/RoomList/Level 1/CSGCombiner/CSGMesh"]
+transform = Transform( 3.33333, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -31.6528 )
+width = 4.0
+height = 4.0
+depth = 1.5
+script = ExtResource( 3 )
+
+[node name="Portal" type="Portal" parent="RoomManager/RoomList/Level 1/CSGCombiner/CSGMesh/Door"]
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0 )
+points = PoolVector2Array( -1, 1, -1, -1, 1, -1, 1, 1 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 6 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="WorldEnvironment"]
 transform = Transform( -4.37114e-08, -0.5, 0.866025, 0, 0.866025, 0.5, -1, 2.18557e-08, -3.78552e-08, 0, 100, 0 )
-light_energy = 2.0
+light_energy = 0.679
 shadow_enabled = true
 shadow_color = Color( 0.6, 0.6, 0.6, 1 )
+
+[connection signal="body_entered" from="RoomManager/RoomList/Level 1/CSGCombiner/Button" to="RoomManager/RoomList/Level 1/CSGCombiner/CSGMesh/Door" method="_on_Button_body_entered"]
+[connection signal="body_exited" from="RoomManager/RoomList/Level 1/CSGCombiner/Button" to="RoomManager/RoomList/Level 1/CSGCombiner/CSGMesh/Door" method="_on_Button_body_exited"]

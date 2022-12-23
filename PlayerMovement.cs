@@ -1,15 +1,18 @@
 using Godot;
 using System;
 
-public class PlayerMovement : KinematicBody
+public class PlayerMovement : RigidBody
 {
-    [Export]
-    public float mouseSensitvity = 1f;
+    
 
     [Export]
-    public float playerSpeed = 10, airSpeed = 5, swimSpeed = 5;
+    public float playerSpeed = 25, airSpeed = 5, swimSpeed = 5;
+
     [Export]
-    public float groundAccel = 10, airAccel = 5, waterDrag = 3;
+    public float groundDrag = 0.2f;
+    
+    [Export]
+    public float groundAccel = 5, airAccel = 0.5f, waterDrag = 3;
 
     [Export]
     public float jumpPower = 10f, waterJump = 5f;
@@ -20,218 +23,117 @@ public class PlayerMovement : KinematicBody
     [Export]
     float gravity = 9.8f;
 
-    float fallingSpeed = 0f;
-    Vector3 velocity;
-    Vector3 inputMotion;
-    Spatial cameraArm;
-    SpotLight flashlight;
-    RayCast rayCast;
-    
-    Godot.Object target = null;
-    Transform player;
+    [Export]
+    float floorCastDistance = -1;
 
-    public bool toSwim = false, surfacing = false;
+    Vector2 inputMotion;
+    
+    Spatial cameraArm;
+    
+    Area floorCollide;
+    Godot.Object target = null;
+    
+    public bool toSwap = false, onGround = false, toSwim = false, surfacing = false;
     
     public override void _Ready()
     {
-        mouseSensitvity /= 1000;
+        // OS.WindowFullscreen = true;
+        // floorCast.CastTo = floorCast.CastTo * floorCastDistance;
+        cameraArm = GetNode<Spatial>("CameraArm");
+        
         // flashlight.Visible = false;
         Input.SetMouseMode(Input.MouseMode.Captured);
-        cameraArm = GetNode<Spatial>("CameraArm");
-        flashlight = GetNode<SpotLight>("CameraArm/Flashlight");
-        rayCast = GetNode<RayCast>("CameraArm/RayCast");
-
-        rayCast.CastTo *= shootDistance;
+        floorCollide = GetNode<Area>("OnGroundCheck");
     }
 
     public override void _Process(float delta)
     {
-        handleInputs(delta);
+    
     }
 
-    public override void _Input(InputEvent @event)
+    public override void _UnhandledInput(InputEvent @event)
     {
-        if(@event is InputEventMouseMotion mouseMotion)
+        //Esc to see mouse cursor
+        if(Input.IsKeyPressed(16777217))
         {
-            cameraArm.Rotation = Vector3.Right * Mathf.Clamp(cameraArm.Rotation.x-mouseMotion.Relative.y * mouseSensitvity, -Mathf.Pi/2, Mathf.Pi/2) ;
-            RotateY(-mouseMotion.Relative.x * mouseSensitvity);
+            Input.SetMouseMode(Input.MouseMode.Visible);
         }
-        if(@event is InputEventKey inputKey)
-        {
-            if(inputKey.PhysicalScancode == 16777217)
-            {
-                Input.SetMouseMode(Input.MouseMode.Visible);
-            }
-        }
+        inputMotion = Input.GetVector("move_left","move_right","move_back","move_forward").Normalized();
     }
 
     public override void _PhysicsProcess(float delta)
     {
-
-        swapGun(delta);
-        if(toSwim)
-        {
-            if(IsOnFloor())
-            {
-                GroundMovement(delta);
-            }
-            else
-            {
-                Swimming(delta);
-            }
-        }
-        else
-        {
-            GroundMovement(delta);
-        }
+        GroundMovement(delta);
     }
 
-    private void handleInputs(float delta)
+    public override void _IntegrateForces(PhysicsDirectBodyState state)
     {
-        inputMotion.x = Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left");
-        inputMotion.y = -cameraArm.Rotation.x/(Mathf.Pi/2);
-        inputMotion.z = Input.GetActionStrength("move_back") - Input.GetActionStrength("move_forward");
+        Vector3 flatVector = new Vector3(state.LinearVelocity.x, 0, state.LinearVelocity.z);
+        float dotFlat = getMoveDirection().Dot(state.LinearVelocity);
         
-        handleFlashlight();
-    }
+        if(onGround && flatVector.Length() > playerSpeed)
+        {
+            Vector3 limit = flatVector.Normalized() * playerSpeed;
+            state.LinearVelocity = new Vector3(limit.x, state.LinearVelocity.y, limit.z);
+        }
 
-    private void handleFlashlight()
-    {
-        if(Input.IsActionJustPressed("toggle flashlight"))
+        if(onGround && inputMotion.Length() < 0.2)
         {
-            flashlight.Visible = !flashlight.Visible;
+            Vector3 lerped = state.LinearVelocity.LinearInterpolate(Vector3.Zero, groundDrag);
+            state.LinearVelocity = new Vector3(lerped.x, state.LinearVelocity.y, lerped.z);
         }
-    }
-
-    private void swapGun(float delta)
-    {
-        if(Input.IsActionJustPressed("shoot"))
+        if(toSwap)
         {
-            rayCast.Enabled = true;
+            SwapPositionWithPlayer(state);
+            SwapVelocityWithPlayer(state);
+            toSwap = false;
         }
-        if(Input.IsActionPressed("shoot"))
-        {
-            //Shoot Beam 
-        }
-        else if(Input.IsActionJustReleased("shoot"))
-        {
-            target = rayCast.GetCollider();
-            
-            rayCast.Enabled = false;
-            
-        }
-        if(Input.IsActionJustPressed("teleport"))
-        {
-            if(target != null)
-            {
-                SwapPositionWithPlayer();
-                SwapVelocityWithPlayer();
-                GD.Print(target);
-                // target = null;
-            }
-            else
-                GD.PrintT("No Teleport Target");
-        }
-    }
-
-    void SwapPositionWithPlayer()
-    {
-        object tempTarget = target.Get("translation");
-        target.Set("translation", Transform.origin);
-        Translation = stringToVector3(tempTarget.ToString());
-    }
-
-    void SwapVelocityWithPlayer()
-    {
-        object tempTarget = target.Get("linear_velocity");
-        target.Set("linear_velocity", velocity);
-        velocity = stringToVector3(tempTarget.ToString());
-    }
-    
-    private Vector3 stringToVector3(string coord)
-    {
-        string[] stringNumbers = coord.Substring(1, coord.Length()-2).Split(", ");   
-        return new Vector3(float.Parse(stringNumbers[0]), float.Parse(stringNumbers[1]), float.Parse(stringNumbers[2]));
     }
 
     private void GroundMovement(float delta)
     {
+        float accel = onGround ? groundAccel : airAccel;
         
-
-        Vector3 direction = Vector3.Zero;
-
-        direction += inputMotion.x * Transform.basis.x + inputMotion.z * Transform.basis.z;
         
-        float accel, speed;
-        Vector3 dir;
-        if(IsOnFloor())
+        if(Input.IsActionJustPressed("jump") && onGround)
         {
-            accel = groundAccel;
-            speed = playerSpeed;
-            direction = direction.Normalized() * speed;
-            dir = direction;
+            ApplyCentralImpulse(Vector3.Up * jumpPower);
         }
-        else
-        {
-            accel = airAccel;
-            speed = airSpeed;
-            direction = direction.Normalized() * speed;
-
-            float currentSpeed = velocity.Dot(direction);
-            float addSpeed = Mathf.Clamp(speed - currentSpeed, 0, accel);
-            dir = velocity + addSpeed * direction;
-        }
-        UpdateFalling(delta);
-        velocity = velocity.LinearInterpolate(dir, accel * delta);
-        velocity = MoveAndSlide(velocity, Vector3.Up, infiniteInertia: false);
+        Vector3 flatVector = new Vector3(LinearVelocity.x, 0, LinearVelocity.z);
+        float dotFlat = flatVector.Dot(getMoveDirection());
+        
+        AddCentralForce(getMoveDirection() * accel);
     }
 
-    private void Swimming(float delta)
+    Vector3 getMoveDirection()
     {
-        Vector3 direction = Vector3.Zero;
-
-        direction += inputMotion.x * Transform.basis.x;
-        direction.y += inputMotion.y * inputMotion.z;
-        direction += inputMotion.z * Transform.basis.z;
-        if(Input.IsActionPressed("jump") && toSwim)
-        {
-            direction.y = 1;
-        }
-        direction = direction.Normalized() * swimSpeed;
-
-        
-        velocity = velocity.LinearInterpolate(direction, waterDrag * delta);
-        velocity = MoveAndSlide(velocity, Vector3.Up);
+        Vector3 moveDirection = Vector3.Zero;
+        moveDirection += inputMotion.x * cameraArm.GlobalTransform.basis.x;
+        moveDirection -= inputMotion.y * cameraArm.GlobalTransform.basis.z;
+        return moveDirection;
     }
 
-    private void UpdateFalling(float delta)
+    void SwapPositionWithPlayer(PhysicsDirectBodyState state)
     {
-        if(IsOnFloor())
-        {
-            fallingSpeed = -0.05f;
-        }
-        else
-        {
-            fallingSpeed -=  10 * gravity * delta;
-        }
-
-        if(Input.IsActionPressed("jump") && IsOnFloor())
-        {
-            fallingSpeed = gravity * jumpPower;
-        }
-
-        if(Input.IsActionPressed("jump") && surfacing)
-        {
-            fallingSpeed = waterJump;
-            surfacing = false;
-        }
-
-        
-        velocity.y = fallingSpeed;
+        Transform tempTarget = (Transform) target.Get("global_transform");
+        target.Set("global_transform", GlobalTransform);
+        state.Transform = new Transform(state.Transform.basis, tempTarget.origin);
     }
-    public void ResetFall()
+
+    void SwapVelocityWithPlayer(PhysicsDirectBodyState state)
     {
-        fallingSpeed = 0f;
+        Vector3 tempTarget = (Vector3) target.Get("linear_velocity");
+        target.Set("linear_velocity", state.LinearVelocity);
+        state.LinearVelocity = tempTarget;
     }
-    
+
+    public void _on_OnGroundCheck_body_entered(object body)
+    {
+        onGround = true;
+    }
+
+    public void _on_OnGroundCheck_body_exited(object body)
+    {
+        onGround = false;
+    }
 }
