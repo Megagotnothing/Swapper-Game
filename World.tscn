@@ -36,7 +36,6 @@ tonemap_mode = 2
 transform = Transform( -0.98689, 0, 0.104736, 0, 0.992432, 0, -0.104736, 0, -0.98689, 1.07367, 2.85781, -12.8402 )
 physics_material_override = SubResource( 8 )
 can_sleep = false
-groundAccel = 100.0
 
 [node name="RoomManager" type="RoomManager" parent="."]
 roomlist = NodePath("RoomList")
@@ -47,7 +46,7 @@ roomlist = NodePath("RoomList")
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -64.2 )
 
 [node name="HeavyCube" parent="RoomManager/RoomList/Level 2" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 18.6026 )
+transform = Transform( 1.00592, 0, 0, 0, 1.00592, 0, 0, 0, 1.00592, 0, 2, 18.6026 )
 
 [node name="CSGCombiner" type="CSGCombiner" parent="RoomManager/RoomList/Level 2"]
 use_collision = true
@@ -78,6 +77,9 @@ material = ExtResource( 4 )
 
 [node name="Level 1" type="Room" parent="RoomManager/RoomList"]
 
+[node name="HeavyCube2" parent="RoomManager/RoomList/Level 1" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, 0 )
+
 [node name="HeavyCube" parent="RoomManager/RoomList/Level 1" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9, 0 )
 
@@ -86,7 +88,7 @@ use_collision = true
 collision_mask = 0
 
 [node name="Button" type="Area" parent="RoomManager/RoomList/Level 1/CSGCombiner"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.95754, 2.79197, -24.7815 )
+transform = Transform( 2, 0, 0, 0, 0.2, 0, 0, 0, 2, -9.95754, 0.5, -24.7815 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RoomManager/RoomList/Level 1/CSGCombiner/Button"]
 shape = SubResource( 9 )
@@ -105,13 +107,14 @@ material = ExtResource( 4 )
 [node name="CSGMesh2" type="CSGBox" parent="RoomManager/RoomList/Level 1/CSGCombiner/CSGMesh"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0.333853 )
 operation = 2
-width = 118.0
+width = 111.165
 height = 12.0
-depth = 62.6005
+depth = 62.6
 material = ExtResource( 4 )
 
 [node name="Door" type="CSGBox" parent="RoomManager/RoomList/Level 1/CSGCombiner/CSGMesh"]
 transform = Transform( 3.33333, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -31.6528 )
+operation = 2
 width = 4.0
 height = 4.0
 depth = 1.5

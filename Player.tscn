@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://PlayerMovement.cs" type="Script" id=1]
 [ext_resource path="res://crosshair.godoxel.png" type="Texture" id=2]
 [ext_resource path="res://SwapGun.tscn" type="PackedScene" id=3]
 [ext_resource path="res://FPSCamera.cs" type="Script" id=4]
-[ext_resource path="res://SwapGun.cs" type="Script" id=5]
 
 [sub_resource type="CapsuleMesh" id=5]
 
@@ -20,6 +19,10 @@ collision_mask = 3
 axis_lock_angular_x = true
 axis_lock_angular_z = true
 script = ExtResource( 1 )
+playerSpeed = 10.0
+groundAccel = 200.0
+airAccel = 50.0
+jumpPower = 15.0
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
@@ -34,11 +37,10 @@ shape = SubResource( 4 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0 )
 script = ExtResource( 4 )
 
-[node name="CameraHand" type="Spatial" parent="CameraArm"]
+[node name="SwapGun" parent="CameraArm" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, -0.4, -1.6 )
 
-[node name="SwapGun" parent="CameraArm/CameraHand" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, -0.4, -1.7 )
-script = ExtResource( 5 )
+[node name="CameraHand" type="Spatial" parent="CameraArm"]
 
 [node name="Camera" type="Camera" parent="CameraArm/CameraHand"]
 
@@ -61,8 +63,9 @@ rect_scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 2 )
 
 [node name="OnGroundCheck" type="Area" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.4, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.7, 0 )
 collision_layer = 0
+collision_mask = 3
 
 [node name="CylinderCollision" type="CollisionShape" parent="OnGroundCheck"]
 shape = SubResource( 6 )

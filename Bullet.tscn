@@ -16,7 +16,6 @@ continuous_cd = true
 contacts_reported = 1
 contact_monitor = true
 script = ExtResource( 1 )
-bulletSpeed = 50.0
 
 [node name="BulletCollision" type="CollisionShape" parent="."]
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )

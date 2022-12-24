@@ -31,9 +31,8 @@ public class PlayerMovement : RigidBody
     Spatial cameraArm;
     
     Area floorCollide;
-    Godot.Object target = null;
     
-    public bool toSwap = false, onGround = false, toSwim = false, surfacing = false;
+    public bool canMove = true, onGround = false, toSwim = false, surfacing = false;
     
     public override void _Ready()
     {
@@ -44,11 +43,6 @@ public class PlayerMovement : RigidBody
         // flashlight.Visible = false;
         Input.SetMouseMode(Input.MouseMode.Captured);
         floorCollide = GetNode<Area>("OnGroundCheck");
-    }
-
-    public override void _Process(float delta)
-    {
-    
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -63,37 +57,31 @@ public class PlayerMovement : RigidBody
 
     public override void _PhysicsProcess(float delta)
     {
-        GroundMovement(delta);
+        if(canMove)
+        {
+            GroundMovement(delta);
+        }
     }
 
     public override void _IntegrateForces(PhysicsDirectBodyState state)
     {
         Vector3 flatVector = new Vector3(state.LinearVelocity.x, 0, state.LinearVelocity.z);
-        float dotFlat = getMoveDirection().Dot(state.LinearVelocity);
         
         if(onGround && flatVector.Length() > playerSpeed)
         {
             Vector3 limit = flatVector.Normalized() * playerSpeed;
             state.LinearVelocity = new Vector3(limit.x, state.LinearVelocity.y, limit.z);
         }
-
         if(onGround && inputMotion.Length() < 0.2)
         {
             Vector3 lerped = state.LinearVelocity.LinearInterpolate(Vector3.Zero, groundDrag);
             state.LinearVelocity = new Vector3(lerped.x, state.LinearVelocity.y, lerped.z);
-        }
-        if(toSwap)
-        {
-            SwapPositionWithPlayer(state);
-            SwapVelocityWithPlayer(state);
-            toSwap = false;
         }
     }
 
     private void GroundMovement(float delta)
     {
         float accel = onGround ? groundAccel : airAccel;
-        
         
         if(Input.IsActionJustPressed("jump") && onGround)
         {
@@ -113,19 +101,6 @@ public class PlayerMovement : RigidBody
         return moveDirection;
     }
 
-    void SwapPositionWithPlayer(PhysicsDirectBodyState state)
-    {
-        Transform tempTarget = (Transform) target.Get("global_transform");
-        target.Set("global_transform", GlobalTransform);
-        state.Transform = new Transform(state.Transform.basis, tempTarget.origin);
-    }
-
-    void SwapVelocityWithPlayer(PhysicsDirectBodyState state)
-    {
-        Vector3 tempTarget = (Vector3) target.Get("linear_velocity");
-        target.Set("linear_velocity", state.LinearVelocity);
-        state.LinearVelocity = tempTarget;
-    }
 
     public void _on_OnGroundCheck_body_entered(object body)
     {

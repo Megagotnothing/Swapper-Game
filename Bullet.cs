@@ -9,6 +9,7 @@ public class Bullet : RigidBody
     public static int bulletCount = 2;
 
     public static Godot.Collections.Array<Bullet> bulletEntities = new Godot.Collections.Array<Bullet>();
+    public RigidBody target = null;
     CollisionShape colShape;
     bool flying = true, reparented = false;
     public override void _Ready()
@@ -19,9 +20,9 @@ public class Bullet : RigidBody
         GravityScale = 0f;
         if(bulletEntities.Count > bulletCount)
         {
+            target = null;
             bulletEntities[0].QueueFree();
             bulletEntities.RemoveAt(0);
-            
         }
     }
 
@@ -39,6 +40,7 @@ public class Bullet : RigidBody
         else if(flying && GetCollidingBodies()[0] is RigidBody)
         {
             Node collidedNode = (Node)GetCollidingBodies()[0];
+            target = (RigidBody)GetCollidingBodies()[0];
             Transform pos = this.GlobalTransform;
             Node old = GetParent();
             old.RemoveChild(this);
