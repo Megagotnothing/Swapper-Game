@@ -7,14 +7,26 @@ public class FPSCamera : Spatial
     public float mouseSensitvity = 1f;
 
     Vector2 inputMotion;
-    Spatial cameraHand;
+    Spatial cameraHand, holdPos;
+    SpringArm objectArm;
     SpotLight flashlight;
+    RayCast eyeCast;
+    bool holding = false;
     public override void _Ready()
     {
         mouseSensitvity /= 1000;
         cameraHand = GetNode<Spatial>("CameraHand");
         flashlight = GetNode<SpotLight>("CameraHand/Flashlight");
+        objectArm = GetNode<SpringArm>("CameraHand/ObjectArm");
+        holdPos = GetNode<Spatial>("CameraHand/ObjectArm/HoldPosition");
+        eyeCast = GetNode<RayCast>("CameraHand/RayCast");
     }
+
+    public override void _PhysicsProcess(float delta)
+    {
+        pickUp(delta);
+    }
+
     public override void _Input(InputEvent @event)
     {
         //Esc to see mouse cursor
@@ -24,25 +36,33 @@ public class FPSCamera : Spatial
         }
         inputMotion = Input.GetVector("move_left","move_right","move_back","move_forward").Normalized();
 
-
         if(@event is InputEventMouseMotion mouseMotion)
-        {
+        {   Vector3 rot = Rotation;
             float upDown = -mouseMotion.Relative.y * mouseSensitvity;
             float leftRight = -mouseMotion.Relative.x * mouseSensitvity;
             
-            Rotation += Vector3.Right * upDown;
-            Rotation +=  Vector3.Up * leftRight;
+            rot += Vector3.Right * upDown;
+            rot +=  Vector3.Up * leftRight;
 
-            float lockUpDown = Mathf.Clamp(cameraHand.Rotation.x, -Mathf.Pi/2, Mathf.Pi/2);
-            cameraHand.Rotation = new Vector3(lockUpDown, cameraHand.Rotation.y, cameraHand.Rotation.z);
-            
+            rot.x = Mathf.Clamp(rot.x, -Mathf.Pi/2, Mathf.Pi/2);
+
+            Rotation = rot;
         }
-    }
-    private void handleFlashlight()
-    {
+
         if(Input.IsActionJustPressed("toggle flashlight"))
         {
             flashlight.Visible = !flashlight.Visible;
+        }
+    }
+
+    void pickUp(float delta)
+    {
+        GD.Print(eyeCast.GetCollider());
+        RigidBody body = null;
+        if(eyeCast.GetCollider() is RigidBody)
+        {
+            body = (RigidBody) eyeCast.GetCollider();
+            body.Mode = RigidBody.ModeEnum.Kinematic;
         }
     }
 }

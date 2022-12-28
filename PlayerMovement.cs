@@ -98,7 +98,7 @@ public class PlayerMovement : RigidBody
         Vector3 moveDirection = Vector3.Zero;
         moveDirection += inputMotion.x * cameraArm.GlobalTransform.basis.x;
         moveDirection -= inputMotion.y * cameraArm.GlobalTransform.basis.z;
-        return moveDirection;
+        return new Vector3(moveDirection.x, 0, moveDirection.z);
     }
 
 

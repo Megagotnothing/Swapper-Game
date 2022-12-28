@@ -17,12 +17,12 @@ height = 0.4
 collision_layer = 4
 collision_mask = 3
 axis_lock_angular_x = true
+axis_lock_angular_y = true
 axis_lock_angular_z = true
 script = ExtResource( 1 )
 playerSpeed = 10.0
 groundAccel = 200.0
-airAccel = 50.0
-jumpPower = 15.0
+airAccel = 10.0
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
@@ -42,6 +42,11 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, -0.4, -1.6 )
 
 [node name="CameraHand" type="Spatial" parent="CameraArm"]
 
+[node name="ObjectArm" type="SpringArm" parent="CameraArm/CameraHand"]
+
+[node name="HoldPosition" type="Spatial" parent="CameraArm/CameraHand/ObjectArm"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.3 )
+
 [node name="Camera" type="Camera" parent="CameraArm/CameraHand"]
 
 [node name="Flashlight" type="SpotLight" parent="CameraArm/CameraHand"]
@@ -49,10 +54,10 @@ spot_range = 42.0
 spot_angle = 32.6598
 
 [node name="RayCast" type="RayCast" parent="CameraArm/CameraHand"]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -1 )
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -0.998602 )
 enabled = true
-cast_to = Vector3( 0, 0, 1 )
-collision_mask = 3
+cast_to = Vector3( 0, 0, 100 )
+collision_mask = 7
 
 [node name="Crosshair" type="TextureRect" parent="CameraArm/CameraHand"]
 margin_left = 512.0
@@ -63,7 +68,7 @@ rect_scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 2 )
 
 [node name="OnGroundCheck" type="Area" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.7, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0 )
 collision_layer = 0
 collision_mask = 3
 

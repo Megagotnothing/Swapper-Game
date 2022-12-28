@@ -4,7 +4,7 @@
 
 [node name="SwapGun" type="Spatial"]
 script = ExtResource( 1 )
-gunMode = "Possess"
+gunMode = "Swap"
 
 [node name="CSGCombiner" type="CSGCombiner" parent="."]
 
