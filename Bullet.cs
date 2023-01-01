@@ -11,7 +11,8 @@ public class Bullet : RigidBody
     public static Godot.Collections.Array<Bullet> bulletEntities = new Godot.Collections.Array<Bullet>();
     public RigidBody target = null;
     CollisionShape colShape;
-    bool flying = true, reparented = false;
+    public bool flying = false;
+    bool reparented = false;
     public override void _Ready()
     {
         colShape = GetNode<CollisionShape>("BulletCollision");

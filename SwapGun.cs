@@ -10,18 +10,26 @@ public class SwapGun : Spatial
     public int existingBullets = 2;
 
     PackedScene bulletScene;
+
+    Spatial muzzle;
+    public Vector3 aimPoint = Vector3.Zero;
     public override void _Ready()
     {
         Bullet.bulletCount = existingBullets;
         bulletScene = GD.Load<PackedScene>("res://Bullet.tscn");
+        muzzle = GetNode<Spatial>("Muzzle");
     }
     
     public override void _Input(InputEvent @event)
     {
         if(@event.IsActionPressed("shoot"))
         {
-            RigidBody bullet = (RigidBody)bulletScene.Instance();
-            AddChild(bullet);
+            Bullet bullet = (Bullet)bulletScene.Instance();
+            muzzle.AddChild(bullet);
+            bullet.LookAt(aimPoint, Vector3.Up);
+            LookAt(aimPoint, Vector3.Up);
+            bullet.flying = true;
+            GD.Print(aimPoint);
         }
         if(Bullet.bulletEntities.Count == 2 && 
             Bullet.bulletEntities[0].target != null && 

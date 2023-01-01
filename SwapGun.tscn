@@ -20,3 +20,6 @@ radius = 0.1
 [node name="CSGSphere" type="CSGSphere" parent="CSGCombiner"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5 )
 radius = 0.127974
+
+[node name="Muzzle" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.502913 )

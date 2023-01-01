@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Tunnel.cs" type="Script" id=1]
+
+[node name="Tunnel" type="CSGBox"]
+invert_faces = true
+width = 5.0
+height = 5.0
+depth = 5.0
+script = ExtResource( 1 )
+
+[node name="Door" type="CSGBox" parent="."]
+operation = 2
+invert_faces = true
+width = 5.0
+height = 5.0
+depth = 1.0
+
+[node name="Tween" type="Tween" parent="."]

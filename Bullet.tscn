@@ -1,17 +1,14 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Bullet.cs" type="Script" id=1]
 
 [sub_resource type="CapsuleShape" id=1]
-
-[sub_resource type="PrismMesh" id=2]
 
 [sub_resource type="CapsuleMesh" id=3]
 
 [node name="Bullet" type="RigidBody"]
 collision_layer = 0
 collision_mask = 7
-mass = 0.01
 continuous_cd = true
 contacts_reported = 1
 contact_monitor = true
@@ -20,12 +17,6 @@ script = ExtResource( 1 )
 [node name="BulletCollision" type="CollisionShape" parent="."]
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
 shape = SubResource( 1 )
-
-[node name="Point" type="MeshInstance" parent="BulletCollision"]
-transform = Transform( 1, 0, 0, 0, 1.21072e-07, 0.75, 0, -1, 1.11759e-07, 0, 0, -1 )
-mesh = SubResource( 2 )
-skeleton = NodePath("../Shell")
-material/0 = null
 
 [node name="Shell" type="MeshInstance" parent="BulletCollision"]
 mesh = SubResource( 3 )

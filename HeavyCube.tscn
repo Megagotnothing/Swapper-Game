@@ -10,7 +10,6 @@ albedo_color = Color( 0.172549, 0.792157, 1, 1 )
 [node name="HeavyCube" type="RigidBody"]
 collision_layer = 2
 collision_mask = 3
-can_sleep = false
 __meta__ = {
 "_edit_group_": true
 }

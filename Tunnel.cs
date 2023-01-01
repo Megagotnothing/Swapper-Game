@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 public class Tunnel : CSGBox
-{
+{   
     Tween tween;
     CSGBox door;
     Vector3 start, end;
@@ -12,7 +12,6 @@ public class Tunnel : CSGBox
         door = GetNode<CSGBox>("Door");
         start = door.Translation;
         end = door.Translation + Vector3.Up * 4.9f;
-        
     }
 
     public void _on_Button_body_entered(object body)

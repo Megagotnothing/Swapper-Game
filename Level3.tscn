@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://protoblack.tres" type="Material" id=1]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://EndRoom.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Tunnel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Button.tscn" type="PackedScene" id=5]
+[ext_resource path="res://HeavyCube.tscn" type="PackedScene" id=6]
+
+[node name="Level3" type="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0 )
+
+[node name="HeavyCube" parent="." instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.40889, -1.79681, -58.193 )
+
+[node name="Button" parent="." instance=ExtResource( 5 )]
+transform = Transform( 2, 0, 0, 0, 0.2, 0, 0, 0, 2, 6.3, -4.8, 0 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.6, 0 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="."]
+use_collision = true
+
+[node name="Tunnel" parent="CSGCombiner" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.2, -67.6 )
+
+[node name="EndRoom" parent="CSGCombiner" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.124284, 0.635829, -87.2301 )
+
+[node name="CSGBox" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30.5 )
+invert_faces = true
+width = 20.0
+height = 10.0
+depth = 70.0
+material = ExtResource( 1 )
+
+[node name="CSGBox2" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -18.7, -30.5 )
+invert_faces = true
+width = 20.0
+height = 29.8
+depth = 50.0
+material = ExtResource( 1 )
+
+[connection signal="body_entered" from="Button" to="CSGCombiner/Tunnel" method="_on_Button_body_entered"]
+[connection signal="body_exited" from="Button" to="CSGCombiner/Tunnel" method="_on_Button_body_exited"]

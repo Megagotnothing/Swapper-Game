@@ -42,10 +42,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, -0.4, -1.6 )
 
 [node name="CameraHand" type="Spatial" parent="CameraArm"]
 
-[node name="ObjectArm" type="SpringArm" parent="CameraArm/CameraHand"]
-
-[node name="HoldPosition" type="Spatial" parent="CameraArm/CameraHand/ObjectArm"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.3 )
+[node name="HoldPosition" type="Spatial" parent="CameraArm/CameraHand"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4 )
 
 [node name="Camera" type="Camera" parent="CameraArm/CameraHand"]
 
@@ -53,11 +51,17 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.3 )
 spot_range = 42.0
 spot_angle = 32.6598
 
-[node name="RayCast" type="RayCast" parent="CameraArm/CameraHand"]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -0.998602 )
+[node name="EyeCast" type="RayCast" parent="CameraArm/CameraHand"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
 enabled = true
-cast_to = Vector3( 0, 0, 100 )
-collision_mask = 7
+cast_to = Vector3( 0, 0, -500 )
+collision_mask = 3
+
+[node name="GrabCast" type="RayCast" parent="CameraArm/CameraHand"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
+enabled = true
+cast_to = Vector3( 0, 0, -1 )
+collision_mask = 3
 
 [node name="Crosshair" type="TextureRect" parent="CameraArm/CameraHand"]
 margin_left = 512.0
@@ -77,3 +81,5 @@ shape = SubResource( 6 )
 
 [connection signal="body_entered" from="OnGroundCheck" to="." method="_on_OnGroundCheck_body_entered"]
 [connection signal="body_exited" from="OnGroundCheck" to="." method="_on_OnGroundCheck_body_exited"]
+
+[editable path="CameraArm/SwapGun"]
