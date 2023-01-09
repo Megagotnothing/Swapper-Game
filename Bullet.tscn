@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Bullet.cs" type="Script" id=1]
+[ext_resource path="res://Scripts/Bullet.cs" type="Script" id=1]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -9,6 +9,7 @@
 [node name="Bullet" type="RigidBody"]
 collision_layer = 0
 collision_mask = 7
+mass = 0.01
 continuous_cd = true
 contacts_reported = 1
 contact_monitor = true

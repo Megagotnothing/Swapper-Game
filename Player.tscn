@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://PlayerMovement.cs" type="Script" id=1]
+[ext_resource path="res://Scripts/PlayerMovement.cs" type="Script" id=1]
 [ext_resource path="res://crosshair.godoxel.png" type="Texture" id=2]
 [ext_resource path="res://SwapGun.tscn" type="PackedScene" id=3]
-[ext_resource path="res://FPSCamera.cs" type="Script" id=4]
+[ext_resource path="res://Scripts/FPSCamera.cs" type="Script" id=4]
+[ext_resource path="res://Scripts/Crosshair.cs" type="Script" id=5]
 
 [sub_resource type="CapsuleMesh" id=5]
 
@@ -64,12 +65,11 @@ cast_to = Vector3( 0, 0, -1 )
 collision_mask = 3
 
 [node name="Crosshair" type="TextureRect" parent="CameraArm/CameraHand"]
-margin_left = 512.0
-margin_top = 300.0
-margin_right = 576.0
-margin_bottom = 364.0
-rect_scale = Vector2( 0.5, 0.5 )
+margin_right = 64.0
+margin_bottom = 64.0
 texture = ExtResource( 2 )
+script = ExtResource( 5 )
+scale = 0.5
 
 [node name="OnGroundCheck" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0 )

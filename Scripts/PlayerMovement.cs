@@ -18,9 +18,6 @@ public class PlayerMovement : RigidBody
     public float jumpPower = 10f, waterJump = 5f;
 
     [Export]
-    public int shootDistance = 100;
-
-    [Export]
     float gravity = 9.8f;
 
     [Export]
@@ -61,6 +58,7 @@ public class PlayerMovement : RigidBody
         {
             GroundMovement(delta);
         }
+        
     }
 
     public override void _IntegrateForces(PhysicsDirectBodyState state)

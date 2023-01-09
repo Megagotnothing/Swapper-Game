@@ -29,6 +29,7 @@ nextLevel = ExtResource( 7 )
 
 [node name="Tunnel" parent="CSGCombiner" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.3, -45.6175 )
+buttonPath = NodePath("../../Button")
 
 [node name="CSGBox" type="CSGBox" parent="CSGCombiner"]
 invert_faces = true

@@ -27,9 +27,7 @@ public class SwapGun : Spatial
             Bullet bullet = (Bullet)bulletScene.Instance();
             muzzle.AddChild(bullet);
             bullet.LookAt(aimPoint, Vector3.Up);
-            LookAt(aimPoint, Vector3.Up);
             bullet.flying = true;
-            GD.Print(aimPoint);
         }
         if(Bullet.bulletEntities.Count == 2 && 
             Bullet.bulletEntities[0].target != null && 

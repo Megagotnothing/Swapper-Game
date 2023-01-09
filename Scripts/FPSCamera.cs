@@ -42,10 +42,12 @@ public class FPSCamera : Spatial
     {
         pickUp(delta);
         swapGun.aimPoint = eyeCast.GetCollisionPoint();
+        swapGun.LookAt(eyeCast.GetCollisionPoint(), Vector3.Up);
     }
 
     public override void _Input(InputEvent @event)
     {
+
         //Esc to see mouse cursor
         if(Input.IsKeyPressed(16777217))
         {

@@ -12,7 +12,6 @@ public class Bullet : RigidBody
     public RigidBody target = null;
     CollisionShape colShape;
     public bool flying = false;
-    bool reparented = false;
     public override void _Ready()
     {
         colShape = GetNode<CollisionShape>("BulletCollision");
@@ -48,7 +47,6 @@ public class Bullet : RigidBody
             collidedNode.AddChild(this);
             this.GlobalTransform = pos;
             colShape.Disabled = true;
-            reparented = true;
             SetAsToplevel(false);
             flying = false;
         }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://protoblack.tres" type="Material" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -6,12 +6,16 @@
 [ext_resource path="res://Tunnel.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Button.tscn" type="PackedScene" id=5]
 [ext_resource path="res://HeavyCube.tscn" type="PackedScene" id=6]
+[ext_resource path="res://MainMenu.tscn" type="PackedScene" id=7]
 
 [node name="Level3" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0 )
 
 [node name="HeavyCube" parent="." instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.40889, -1.79681, -58.193 )
+
+[node name="HeavyCube2" parent="." instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.40889, -1.79681, -0.00426102 )
 
 [node name="Button" parent="." instance=ExtResource( 5 )]
 transform = Transform( 2, 0, 0, 0, 0.2, 0, 0, 0, 2, 6.3, -4.8, 0 )
@@ -24,9 +28,11 @@ use_collision = true
 
 [node name="Tunnel" parent="CSGCombiner" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.2, -67.6 )
+buttonPath = NodePath("../../Button")
 
 [node name="EndRoom" parent="CSGCombiner" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.124284, 0.635829, -87.2301 )
+nextLevel = ExtResource( 7 )
 
 [node name="CSGBox" type="CSGBox" parent="CSGCombiner"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30.5 )
